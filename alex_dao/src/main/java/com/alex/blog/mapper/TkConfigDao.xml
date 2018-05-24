@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.alex.blog.dao.TkConfigDao">
+    <resultMap id="configMap" type="com.alex.blog.entity.TkConfig">
+        <id column="id" property="id"/>
+        <result column="type" property="type"/>
+        <result column="name" property="name"/>
+        <result column="p_id" property="pid"/>
+        <result column="keys" property="keys"/>
+        <result column="values" property="values"/>
+        <result column="image" property="image"/>
+        <result column="listorder" property="listorder"/>
+        <result column="add_user" property="addUser"/>
+        <result column="add_time" property="addTime"/>
+        <result column="disabled" property="status"/>
+    </resultMap>
+
+    <!--分页-->
+    <sql id="pagination">
+        <if test=" pageSize > 0">
+            LIMIT #{offset}, #{pageSize}
+        </if>
+    </sql>
+
+    <!--查找所有启用的前台栏目-->
+    <select id="selectAllEnabledColumn" resultMap="configMap">
+        SELECT
+            id,
+            type,
+            name,
+            p_id,
+            `keys`,
+            `values`,
+            image,
+            listorder,
+            add_user,
+            add_time,
+            disabled
+        FROM tk_config
+        WHERE type = 3 AND disabled = 0
+    </select>
+
+    <!--查询地区/年份数量-->
+    <select id="selectConfigCount" resultType="java.lang.Integer">
+        select count(id) from tk_config
+        <where>
+            <if test="id!=null">
+                id=#{id}
+            </if>
+            <if test="type!=null">
+                and type=#{type}
+            </if>
+            <if test="name!=null">
+                and name LIKE concat(concat('%',#{name}),'%')
+            </if>
+            <if test="status!=null">
+                and disabled=#{status}
+            </if>
+        </where>
+    </select>
+
+    <!--查询所有地区/年份-->
+    <select id="selectAllConfig" resultMap="configMap">
+        select
+        id,
+        type,
+        name,
+        p_id,
+        listorder,
+        add_user,
+        FROM_UNIXTIME( add_time, '%Y-%m-%d %H:%i:%s' ) add_time,
+        disabled
+        from tk_config
+        <where>
+            <if test="id!=null">
+                id=#{id}
+            </if>
+            <if test="type!=null">
+                and type=#{type}
+            </if>
+            <if test="name!=null">
+                and name LIKE concat(concat('%',#{name}),'%')
+            </if>
+            <if test="status!=null">
+                and disabled=#{status}
+            </if>
+        </where>
+        <include refid="pagination"/>
+    </select>
+
+    <!--添加配置信息-->
+    <insert id="addConfigInfo">
+        insert into tk_config (type, name, p_id, `keys`, `values`, listorder, add_user, add_time, disabled)
+        values (#{type}, #{name}, #{pid}, #{keys}, #{values}, #{listorder}, #{addUser}, #{addTime}, #{status})
+    </insert>
+
+    <!--更新配置信息-->
+    <update id="updateConfigInfoById">
+        update tk_config
+        <set>
+            <if test="name!=null">
+                name=#{name},
+            </if>
+            <if test="pid!=null">
+                p_id=#{pid},
+            </if>
+            <if test="keys!=null">
+                `keys`=#{keys},
+            </if>
+            <if test="values!=null">
+                `values`=#{values},
+            </if>
+            <if test="image!=null">
+                image=#{image},
+            </if>
+            <if test="listorder!=null">
+                listorder=#{listorder},
+            </if>
+            <if test="status!=null">
+                disabled=#{status}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <!--批量启用-->
+    <update id="batchStartStatusByIds" parameterType="list">
+        update tk_config set disabled=0 where id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <!--批量禁用-->
+    <update id="batchForbidStatusByIds" parameterType="list">
+        update tk_config set disabled=1 where id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <!--根据ID查询相应配置信息-->
+    <select id="selectConfigInfoById" parameterType="java.lang.Integer" resultMap="configMap">
+        select
+            id,
+            type,
+            name,
+            p_id,
+            listorder,
+            add_user,
+            FROM_UNIXTIME(add_time, '%Y-%m-%d %H:%i:%s') add_time,
+            disabled
+        from tk_config
+        where id = #{id}
+    </select>
+
+    <select id="selectAllConfigs" resultMap="configMap">
+        select
+            id,
+            type,
+            name,
+            p_id,
+            listorder,
+            disabled
+        from tk_config
+    </select>
+
+    <select id="selectAllArea" resultMap="configMap">
+        SELECT
+            id,
+            `name`
+        FROM
+            tk_config
+        WHERE
+            type = 1
+            AND disabled = 0
+        ORDER BY
+            listorder
+    </select>
+
+    <select id="selectAllYear" resultMap="configMap">
+        SELECT
+            id,
+            `name`
+        FROM
+            tk_config
+        WHERE
+            type = 2
+            AND disabled = 0
+        ORDER BY
+            listorder DESC
+    </select>
+</mapper>
