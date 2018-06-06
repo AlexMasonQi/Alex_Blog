@@ -6,7 +6,7 @@ public class BaseQueryCond
     //第几页
     private Integer pageIndex = 1;
     //每页显示多少条记录
-    private Integer pageSize = 20;
+    private Integer pageSize = 10;
 
     public String getbInit()
     {

@@ -1,0 +1,20 @@
+@charset "utf-8";
+/* CSS Document */
+
+html{ overflow: auto;}
+body{font:12px/1.5 "宋体",Tahoma,Arial,Helvetica,sans-serif;background:#fff;}
+
+/*关联菜单弹窗*/
+.pop_win{padding:30px;min-width: 770px;}
+.context_menu_l,.context_menu_r{height: 556px;border:1px solid #e6e9ee;width: 45.5%;padding:10px 2%;}
+.context_menu_r{border-left:0;}
+
+.context_menu_tit{line-height: 26px;font-size: 12px;color:#666;font-weight:normal;}
+.context_m_ul{padding:5px 0;}
+.context_m_ul li{min-width: 26px; padding:0 12px;float:left;text-align: center;line-height: 36px;margin-right:3px;background:#e4eaf1;cursor: pointer;}
+.context_m_ul li:hover{background:#4c9cfa;color:#fff;}
+.context_m_ul li.hov{background:#4c9cfa;color:#fff;}
+.context_m_search{font-size:0;}
+/*.context_m_search .pub_sel,.context_m_search .pub_inpt{color:#555;}*/
+/*分页*/
+.page_box{padding:10px 0;}

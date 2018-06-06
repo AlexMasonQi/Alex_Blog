@@ -1,10 +1,12 @@
 package com.alex.blog.dto;
 
-public class TkConfigQueryCond extends BaseQueryCond
+public class TkExamTypeQueryCond extends BaseQueryCond
 {
     private Integer id;
-    private Integer type;
+    private Integer fid;
+    private String pidId;
     private String name;
+    private Integer isType;
     private Integer status;
 
     public Integer getId()
@@ -17,14 +19,24 @@ public class TkConfigQueryCond extends BaseQueryCond
         this.id = id;
     }
 
-    public Integer getType()
+    public Integer getFid()
     {
-        return type;
+        return fid;
     }
 
-    public void setType(Integer type)
+    public void setFid(Integer fid)
     {
-        this.type = type;
+        this.fid = fid;
+    }
+
+    public String getPidId()
+    {
+        return pidId;
+    }
+
+    public void setPidId(String pidId)
+    {
+        this.pidId = pidId;
     }
 
     public String getName()
@@ -35,6 +47,16 @@ public class TkConfigQueryCond extends BaseQueryCond
     public void setName(String name)
     {
         this.name = name;
+    }
+
+    public Integer getIsType()
+    {
+        return isType;
+    }
+
+    public void setIsType(Integer isType)
+    {
+        this.isType = isType;
     }
 
     public Integer getStatus()

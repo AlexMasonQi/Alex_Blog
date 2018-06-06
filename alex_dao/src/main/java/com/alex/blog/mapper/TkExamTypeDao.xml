@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.alex.blog.dao.TkExamTypeDao">
+    <resultMap id="examTypeMap" type="com.alex.blog.entity.TkExamType">
+        <id column="id" property="id"/>
+        <result column="fid" property="fid"/>
+        <result column="pid_id" property="pidId"/>
+        <result column="name" property="name"/>
+        <result column="remark" property="remark"/>
+        <result column="sort" property="sort"/>
+        <result column="iscontent" property="isContent"/>
+        <result column="istype" property="isType"/>
+        <result column="columnId" property="columnId"/>
+        <result column="level" property="level"/>
+        <result column="node" property="node"/>
+        <result column="required" property="required"/>
+        <result column="know_required" property="knowRequired"/>
+        <result column="area_required" property="areaRequired"/>
+        <result column="areas" property="area"/>
+        <result column="add_username" property="addUsername"/>
+        <result column="add_time" property="addTime"/>
+        <result column="disabled" property="status"/>
+        <result column="unique_code" property="uniqueCode"/>
+        <result column="jianpin" property="jianpin"/>
+        <result column="isty" property="isty"/>
+        <result column="isApp" property="isApp"/>
+        <result column="category" property="category"/>
+        <result column="ct_type" property="ctType"/>
+        <result column="wx_sid" property="wxSid"/>
+    </resultMap>
+
+    <!--pagination-->
+    <sql id="pagination">
+        <if test=" pageSize > 0">
+            LIMIT #{offset}, #{pageSize}
+        </if>
+    </sql>
+
+    <!--search all exam type-->
+    <select id="selectAllExamType">
+        select
+            id,
+            fid,
+            pid_id,
+            name,
+            remark,
+            disabled,
+            area_required,
+            know_required,
+            add_username,
+            FROM_UNIXTIME(add_time, '%Y-%m-%d %H:%i:%s') add_time,
+            ct_type,
+            category,
+            jianpin,
+            isty
+        from exam_type
+        where istype = 1
+    </select>
+</mapper>
