@@ -24,4 +24,10 @@ public class TestController
 
         return "test/testRedis";
     }
+
+    @RequestMapping("/showCalendar")
+    public String showTestCalendar()
+    {
+        return "test/myCalendar";
+    }
 }

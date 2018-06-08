@@ -38,7 +38,7 @@
     </sql>
 
     <!--search all exam type-->
-    <select id="selectAllExamType">
+    <select id="selectAllExamType" resultMap="examTypeMap">
         select
             id,
             fid,

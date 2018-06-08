@@ -29,7 +29,7 @@ public class HttpServletUtil
     private final static Logger LOG = LoggerFactory.getLogger(HttpServletUtil.class);
 
     /**
-     * Post:访问数据库并返回数据字符串
+     * Post:访问Web服务并返回数据字符串
      *
      * @param params 向服务器端传的参数
      * @param url
