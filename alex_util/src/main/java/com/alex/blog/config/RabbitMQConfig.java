@@ -1,6 +1,8 @@
 package com.alex.blog.config;
 
 import com.rabbitmq.client.Channel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -48,6 +50,8 @@ public class RabbitMQConfig
     private String routingKey;
 
     private String msg;
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
      * @description Config the connection info
@@ -138,15 +142,15 @@ public class RabbitMQConfig
             {
                 String revMessage = new String(message.getBody(), "utf-8");
                 System.out.println(revMessage);
-                for (SocketHandler handler : SocketHandler.webSocketSet)
+                for (var handler : SocketHandler.webSocketSet)
                 {
                     try
                     {
-                        handler.sendMessage(message.toString());
+                        handler.sendMessage(revMessage);
                     }
                     catch (IOException e)
                     {
-                        e.printStackTrace();
+                        logger.error("error send message", e);
                     }
                 }
                 //acknowledge the message has been received

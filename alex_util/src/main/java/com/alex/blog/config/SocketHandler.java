@@ -16,13 +16,12 @@ public class SocketHandler
     //静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
     private static int onlineCount = 0;
 
-    //concurrent包的线程安全Set，用来存放每个客户端对应的MyWebSocket对象，用于群发消息
+    //concurrent包的线程安全Set，用来存放每个客户端对应的SocketHandler对象，用于群发消息
     public static CopyOnWriteArraySet<SocketHandler> webSocketSet = new CopyOnWriteArraySet<>();
 
     //与某个客户端的连接会话，需要通过它来给客户端发送数据
     private Session session;
-
-
+    
     /**
      * 连接建立成功调用的方法
      */
@@ -82,7 +81,6 @@ public class SocketHandler
     public void sendMessage(String message) throws IOException
     {
         this.session.getBasicRemote().sendText(message);
-        //this.session.getAsyncRemote().sendText(message);
     }
 
 
