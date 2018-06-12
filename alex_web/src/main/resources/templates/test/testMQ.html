@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<html>
+
+<div th:replace="common/common_css"></div>
+<div th:replace="common/common_js"></div>
+
+<div class="container-fluid">
+    <div class="row">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+    <div class="row">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+    <div class="row">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+
+    <div class="row">
+        <div class="col-4"></div>
+        <div class="col-4">
+            <div class="form-group">
+                <label for="send">RabbitMQ Sender</label>
+                <textarea class="form-control" id="send" rows="3"
+                          style="margin-top: 0px; margin-bottom: 0px; height: 114px;"></textarea>
+                <button class="btn btn-primary btn-block" onclick="sendMsg()">Send</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    let contextPath = /*[[${#httpServletRequest.contextPath}]]*/'';
+
+    var socket = new WebSocket('ws://' + window.location.host + '/mq-websocket-endpoint');
+
+    $(function () {
+        // Add an event listener for when a connection is open
+        socket.onopen = function () {
+            console.log('WebSocket connection opened. Ready to send messages.');
+
+            // Send a message to the server
+            socket.send('Hello, from WebSocket client!');
+        };
+
+        // Add an event listener for when a message is received from the server
+        socket.onmessage = function (message) {
+            console.log('Message received from server: ' + message.data);
+        };
+    });
+
+    function sendMsg() {
+        $.ajax({
+                   type: "post",
+                   dataType: "json",
+                   url: contextPath + "/test/sendMQMessage",
+                   data: {
+                       "msg": $("#send").val(),
+                   },
+                   success: function (data) {
+                       var result = data.stat;
+                       if (result === "OK") {
+                           layer.msg("send successful!");
+                       }
+                       else {
+                           layer.alert("send failed!");
+                       }
+                   },
+                   error: function () {
+                       layer.alert("error send message '" + $("#send").text() + "', Please try again later.");
+                   }
+               });
+    }
+
+    /*]]>*/
+</script>
