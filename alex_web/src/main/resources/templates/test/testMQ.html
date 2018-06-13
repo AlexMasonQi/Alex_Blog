@@ -19,7 +19,7 @@
                 <label for="send">RabbitMQ Sender</label>
                 <textarea class="form-control" id="send" rows="3"
                           style="margin-top: 0px; margin-bottom: 0px; height: 114px;"></textarea>
-                <button class="btn btn-primary btn-block" onclick="sendMsg()">Send</button>
+                <button class="btn btn-primary btn-lg btn-block" onclick="sendMsg()">Send</button>
             </div>
         </div>
         <div class="col-4">
@@ -58,25 +58,25 @@
 
     function sendMsg() {
         $.ajax({
-            type: "post",
-            dataType: "json",
-            url: contextPath + "/test/sendMQMessage",
-            data: {
-                "msg": $("#send").val(),
-            },
-            success: function (data) {
-                var result = data.stat;
-                if (result === "OK") {
-                    layer.msg("send successful!");
-                }
-                else {
-                    layer.alert("send failed!");
-                }
-            },
-            error: function () {
-                layer.alert("error send message '" + $("#send").text() + "', Please try again later.");
-            }
-        });
+                   type: "post",
+                   dataType: "json",
+                   url: contextPath + "/test/sendMQMessage",
+                   data: {
+                       "msg": $("#send").val(),
+                   },
+                   success: function (data) {
+                       var result = data.stat;
+                       if (result === "OK") {
+                           layer.msg("send successful!");
+                       }
+                       else {
+                           layer.alert("send failed!");
+                       }
+                   },
+                   error: function () {
+                       layer.alert("error send message '" + $("#send").text() + "', Please try again later.");
+                   }
+               });
     }
 
     /*]]>*/

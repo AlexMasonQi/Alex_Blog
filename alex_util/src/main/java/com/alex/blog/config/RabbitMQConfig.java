@@ -49,8 +49,6 @@ public class RabbitMQConfig
     @Value("${mq.key}")
     private String routingKey;
 
-    private String msg;
-
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
