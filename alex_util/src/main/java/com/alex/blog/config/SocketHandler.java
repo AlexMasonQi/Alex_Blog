@@ -1,11 +1,14 @@
 package com.alex.blog.config;
 
+import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Maps;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 @ServerEndpoint("/mq-websocket-endpoint")
@@ -21,13 +24,14 @@ public class SocketHandler
 
     //与某个客户端的连接会话，需要通过它来给客户端发送数据
     private Session session;
-    
+
     /**
      * 连接建立成功调用的方法
      */
     @OnOpen
     public void onOpen(Session session)
     {
+        System.out.println(session.getId());
         this.session = session;
         webSocketSet.add(this);     //加入set中
         addOnlineCount();           //在线数加1
@@ -52,9 +56,16 @@ public class SocketHandler
      * @param message
      */
     @OnMessage
-    public void onMessage(String message, Session session)
+    public void onMessage(String message, Session session) throws IOException
     {
-        System.out.println("来自客户端的消息:" + message);
+        Map<String, String> messageMap = Maps.newHashMap();
+        messageMap.put(session.getId(), message);
+        String jsonMsg = JSON.toJSONString(messageMap);
+        for (SocketHandler socket : SocketHandler.webSocketSet)
+        {
+            socket.getSession().getBasicRemote().sendText(jsonMsg);
+        }
+//        System.out.println("来自客户端" + session.getId() + "的消息:" + message);
     }
 
 
@@ -71,37 +82,23 @@ public class SocketHandler
         error.printStackTrace();
     }
 
-
-    /**
-     * 用于主动推送信息
-     *
-     * @param message
-     * @throws IOException
-     */
-    public void sendMessage(String message) throws IOException
-    {
-        this.session.getBasicRemote().sendText(message);
-    }
-
-
     /**
      * 用于群发自定义消息
      */
-    public static void sendInfo(String message) throws IOException
-    {
-        for (SocketHandler item : webSocketSet)
-        {
-            try
-            {
-                item.sendMessage(message);
-            }
-            catch (IOException e)
-            {
-                continue;
-            }
-        }
-    }
-
+//    public static void sendInfo(String message)
+//    {
+//        for (SocketHandler item : webSocketSet)
+//        {
+//            try
+//            {
+//                item.sendMessage(message);
+//            }
+//            catch (IOException e)
+//            {
+//                continue;
+//            }
+//        }
+//    }
     public static synchronized int getOnlineCount()
     {
         return onlineCount;
@@ -115,5 +112,10 @@ public class SocketHandler
     public static synchronized void subOnlineCount()
     {
         SocketHandler.onlineCount--;
+    }
+
+    public Session getSession()
+    {
+        return session;
     }
 }

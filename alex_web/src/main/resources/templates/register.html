@@ -28,6 +28,7 @@
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" th:href="@{/register/css/util.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/register/css/main.css}">
+    <link rel="stylesheet" th:href="@{/js/layer/theme/default/layer.css}">
     <!--===============================================================================================-->
 </head>
 <body style="background-color: #999999;">
@@ -43,55 +44,46 @@
 					</span>
 
                 <div class="wrap-input100 validate-input" data-validate="Name is required">
-                    <span class="label-input100">Full Name</span>
-                    <input class="input100" type="text" name="name" placeholder="Name...">
+                    <span class="label-input100">Real Name</span>
+                    <input class="input100" type="text" name="realName" id="realName"
+                           placeholder="Please enter your real name">
                     <span class="focus-input100"></span>
                 </div>
 
-                <div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
+                <div class="wrap-input100 validate-input"
+                     data-validate="Valid email is required, for example: @abc.xyz">
                     <span class="label-input100">Email</span>
-                    <input class="input100" type="text" name="email" placeholder="Email addess...">
+                    <input class="input100" type="email" name="email" id="email"
+                           pattern="^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$"
+                           placeholder="Please enter your Email address">
                     <span class="focus-input100"></span>
                 </div>
 
                 <div class="wrap-input100 validate-input" data-validate="Username is required">
                     <span class="label-input100">Username</span>
-                    <input class="input100" type="text" name="username" placeholder="Username...">
+                    <input class="input100" type="text" name="userName" id="userName"
+                           placeholder="Please enter your user name">
                     <span class="focus-input100"></span>
                 </div>
 
                 <div class="wrap-input100 validate-input" data-validate="Password is required">
                     <span class="label-input100">Password</span>
-                    <input class="input100" type="text" name="pass" placeholder="Please input the password">
+                    <input class="input100" type="password" name="password" id="password"
+                           placeholder="Please input the password">
                     <span class="focus-input100"></span>
                 </div>
 
                 <div class="wrap-input100 validate-input" data-validate="Repeat Password is required">
                     <span class="label-input100">Repeat Password</span>
-                    <input class="input100" type="text" name="repeat-pass" placeholder="Please input the password">
+                    <input class="input100" type="password" name="repeatPassword" id="repeatPassword"
+                           placeholder="Please ensure your password" onblur="verifyPassword()">
                     <span class="focus-input100"></span>
                 </div>
-
-                <!--<div class="flex-m w-full p-b-33">-->
-                <!--<div class="contact100-form-checkbox">-->
-                <!--<input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">-->
-                <!--<label class="label-checkbox100" for="ckb1">-->
-                <!--<span class="txt1">-->
-                <!--I agree to the-->
-                <!--<a href="#" class="txt2 hov1">-->
-                <!--Terms of User-->
-                <!--</a>-->
-                <!--</span>-->
-                <!--</label>-->
-                <!--</div>-->
-                <!--</div>-->
 
                 <div class="container-login100-form-btn">
                     <div class="wrap-login100-form-btn">
                         <div class="login100-form-bgbtn"></div>
-                        <button class="login100-form-btn">
-                            Sign Up
-                        </button>
+                        <button class="login100-form-btn" id="btnSignUp" onclick="signUpUser()">Sign Up</button>
                     </div>
                 </div>
             </form>
@@ -115,6 +107,58 @@
 <script th:src="@{/register/vendor/countdowntime/countdowntime.js}"></script>
 <!--===============================================================================================-->
 <script th:src="@{/register/js/main.js}"></script>
+<script th:src="@{/js/jquery.md5.js}"></script>
+<script th:src="@{/js/layer/layer.js}"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    let contextPath = /*[[${#httpServletRequest.contextPath}]]*/'';
+
+    //verify the password
+    function verifyPassword() {
+        let password = $("#password").val();
+        let repeatPassword = $("#repeatPassword").val();
+        if (password !== repeatPassword) {
+            layer.alert("Inconsistent password before and after,Please input again");
+            return false;
+        }
+    }
+
+    function signUpUser() {
+        let userName = $("#userName").val();
+        let realName = $("#realName").val();
+        let email = $("#email").val();
+        let password = $("#password").val();
+
+        //register user
+        $.ajax({
+                   type: "post",
+                   dataType: "json",
+                   url: contextPath + "/registerUser",
+                   data: {
+                       "userName": userName,
+                       "realName": realName,
+                       "email": email,
+                       "password": $.md5(password)
+                   },
+                   success: function (data) {
+                       console.log(data.status);
+                       if (data.status == 1) {
+                           layer.msg("Register successful!");
+                           window.location.href = window.location.host + contextPath + "/login";
+                       }
+                       else {
+                           layer.alert("Register failed!");
+                       }
+                   },
+                   error: function () {
+                       layer.closeAll();
+                       layer.alert("Some errors accoured suddenly, please try again later!");
+                   }
+               });
+    }
+
+    /*]]>*/
+</script>
 
 </body>
 </html>

@@ -16,8 +16,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.Scope;
 
-import java.io.IOException;
-
 @Configuration
 @PropertySource("classpath:rabbit.properties")
 public class RabbitMQConfig
@@ -140,17 +138,6 @@ public class RabbitMQConfig
             {
                 String revMessage = new String(message.getBody(), "utf-8");
                 System.out.println(revMessage);
-                for (var handler : SocketHandler.webSocketSet)
-                {
-                    try
-                    {
-                        handler.sendMessage(revMessage);
-                    }
-                    catch (IOException e)
-                    {
-                        logger.error("error send message", e);
-                    }
-                }
                 //acknowledge the message has been received
                 channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
             }

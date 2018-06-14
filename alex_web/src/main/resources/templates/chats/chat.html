@@ -144,7 +144,7 @@
                             <div class="left">
                                 <div class="chat-avatars"><img th:src="@{/chat/img/icon01.png}" alt="头像"></div>
                                 <div class="chat-message">
-                                    <img src="../../static/chat/img/1.png" alt="">
+                                    <img th:src="@{/chat/img/1.png}" alt="">
                                 </div>
                             </div>
                         </div>
@@ -226,6 +226,9 @@
 <script th:inline="javascript">
 
     screenFuc();
+    $(function () {
+        $(".chatBox").hide();
+    });
 
     function screenFuc() {
         var topHeight = $(".chatBox-head").innerHeight();//聊天头部高度
@@ -306,7 +309,7 @@
         $(".chatBox-kuang").fadeToggle(1);
     });
 
-    //      发送信息
+    //发送信息
     $("#chat-fasong").click(function () {
         var textContent = $(".div-textarea").html().replace(/[\n\r]/g, '<br>')
         if (textContent != "") {
@@ -323,7 +326,7 @@
         }
     });
 
-    //      发送表情
+    //发送表情
     $("#chat-biaoqing").click(function () {
         $(".biaoqing-photo").toggle();
     });
@@ -351,7 +354,7 @@
         })
     });
 
-    //      发送图片
+    //发送图片
     function selectImg(pic) {
         if (!pic.files || !pic.files[0]) {
             return;

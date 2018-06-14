@@ -37,46 +37,41 @@
     /*<![CDATA[*/
     let contextPath = /*[[${#httpServletRequest.contextPath}]]*/'';
 
-    var socket = new WebSocket('ws://' + window.location.host + contextPath + '/mq-websocket-endpoint');
-
-    $(function () {
-        // Add an event listener for when a connection is open
-        socket.onopen = function () {
-            console.log('WebSocket connection opened. Ready to send messages.');
-
-            // Send a message to the server
-            socket.send('Hello, from WebSocket client!');
-        };
-
+    let socket = new WebSocket('ws://' + window.location.host + contextPath + '/mq-websocket-endpoint');
+    // Add an event listener for when a connection is open
+    socket.onopen = function () {
         // Add an event listener for when a message is received from the server
         socket.onmessage = function (message) {
-            // let msg = $.evalJSON(message.data);
-            console.log('Message received from server: ' + message.data.toString());
-            $(".msg").text(message.data.toString());
+            let msg = $.evalJSON(message.data);
+            console.log(msg);
+            $(".msg").text(msg);
         };
-    });
+    };
 
     function sendMsg() {
-        $.ajax({
-                   type: "post",
-                   dataType: "json",
-                   url: contextPath + "/test/sendMQMessage",
-                   data: {
-                       "msg": $("#send").val(),
-                   },
-                   success: function (data) {
-                       var result = data.stat;
-                       if (result === "OK") {
-                           layer.msg("send successful!");
-                       }
-                       else {
-                           layer.alert("send failed!");
-                       }
-                   },
-                   error: function () {
-                       layer.alert("error send message '" + $("#send").text() + "', Please try again later.");
-                   }
-               });
+        // Send a message to the server
+        socket.send($("#send").val());
+
+        // $.ajax({
+        //            type: "post",
+        //            dataType: "json",
+        //            url: contextPath + "/test/sendMQMessage",
+        //            data: {
+        //                "msg": $("#send").val(),
+        //            },
+        //            success: function (data) {
+        //                var result = data.stat;
+        //                if (result === "OK") {
+        //                    layer.msg("send successful!");
+        //                }
+        //                else {
+        //                    layer.alert("send failed!");
+        //                }
+        //            },
+        //            error: function () {
+        //                layer.alert("error send message '" + $("#send").text() + "', Please try again later.");
+        //            }
+        //        });
     }
 
     /*]]>*/

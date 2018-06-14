@@ -86,7 +86,7 @@
                 data-param4="" data-param5="" data-param6="" data-param7="" data-param8="" data-param9=""
                 data-param10="" data-description="">
                 <!-- MAIN IMAGE -->
-                <img th:src="@{/images/home-slider/slider-1.jpg}" alt="" data-bgposition="center center"
+                <img th:src="@{/images/blueSky.jpg}" alt="" data-bgposition="center center"
                      data-bgfit="cover"
                      data-bgrepeat="no-repeat" class="rev-slidebg" data-no-retina>
                 <!-- LAYER NR. 1 -->
@@ -200,7 +200,7 @@
                 data-param4="" data-param5="" data-param6="" data-param7="" data-param8="" data-param9=""
                 data-param10="" data-description="">
                 <!-- MAIN IMAGE -->
-                <img th:src="@{/images/home-slider/slider-1.jpg}" alt="" data-bgposition="center center"
+                <img th:src="@{/images/water.jpg}" alt="" data-bgposition="center center"
                      data-bgfit="cover"
                      data-bgrepeat="no-repeat" class="rev-slidebg" data-no-retina>
                 <!-- LAYER NR. 1 -->
@@ -568,6 +568,7 @@
                         <div class="f_w_title">
                             <h3>Contact Us</h3>
                         </div>
+                        <a th:href="@{/chat/showChatPage}">Chat with us</a><br>
                         <a href="#">1 (800) 686-6688</a>
                         <a href="#">info.deercreative@gmail.com</a>
                         <p>40 Baria Sreet 133/2 <br/>NewYork City, US</p>
@@ -605,7 +606,6 @@
 </footer>
 <!--================End Footer Area =================-->
 
-
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script th:src="@{/js/jquery-3.2.1.min.js}"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
@@ -632,5 +632,11 @@
 <script th:src="@{/vendors/tweet/script.js}"></script>
 
 <script th:src="@{/js/theme.js}"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    let contextPath = /*[[${#httpServletRequest.contextPath}]]*/'';
+
+    /*]]>*/
+</script>
 </body>
 </html>
