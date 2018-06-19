@@ -7,14 +7,18 @@ import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 
-@Controller
+@RestController
 @RequestMapping("/test")
 public class TestController
 {
@@ -65,4 +69,22 @@ public class TestController
 
         return resultMap;
     }
+
+    @GetMapping("/hello")
+    public ResponseEntity<?> hello(HttpSession session)
+    {
+        if (session.isNew())
+        {
+            logger.info("Successfully creates a session ，the id of session ：" + session.getId());
+            session.setAttribute("key", "hello");
+        }
+        else
+        {
+            logger.info("session already exists in the server, the id of session ：" + session.getId());
+            logger.info(session.getAttribute("key").toString());
+        }
+        return new ResponseEntity<>("Hello World", HttpStatus.OK);
+    }
+
+
 }

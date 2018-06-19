@@ -57,7 +57,8 @@
 
                     <div class="flex-sb-m w-full p-b-30">
                         <div class="contact100-form-checkbox">
-                            <input class="input-checkbox100" id="remember-me" type="checkbox" name="remember-me">
+                            <input class="input-checkbox100" id="remember-me" type="checkbox" value="1"
+                                   name="remember-me">
                             <label class="label-checkbox100" for="remember-me">Remember me</label>
                         </div>
 
@@ -67,7 +68,7 @@
                     </div>
 
                     <div class="container-login100-form-btn">
-                        <button class="login100-form-btn">Login</button>
+                        <button class="login100-form-btn" onclick="loginUser()">Login</button>
                     </div>
                     <div class="m-t-16"><span style="font-size: small;">Don't have a account?&nbsp;&nbsp;&nbsp;</span><a
                             th:href="@{/register}"
@@ -99,6 +100,36 @@
 <script th:inline="javascript">
     /*<![CDATA[*/
     let contextPath = /*[[${#httpServletRequest.contextPath}]]*/'';
+
+    function loginUser() {
+        let userName = $("#userName").val();
+        let password = $("#pass").val();
+        let rememberMe = $("input:checkbox[name='remember-me']:checked").val();
+
+        $.ajax({
+            type: "post",
+            dataType: "json",
+            url: contextPath + "/userLogin",
+            data: {
+                "userName": userName,
+                "password": password,
+                "rememberMe": rememberMe
+            },
+            success: function (data) {
+                if (data.status == 1) {
+                    layer.msg("login success");
+                    window.location.href = window.location.host + contextPath + "/chat/showChatPage";
+                }
+                else {
+                    layer.alert("login failed!");
+                }
+            },
+            error: function () {
+                layer.closeAll();
+                layer.alert("Something error happened,please try again!");
+            }
+        });
+    }
 
     /*]]>*/
 </script>

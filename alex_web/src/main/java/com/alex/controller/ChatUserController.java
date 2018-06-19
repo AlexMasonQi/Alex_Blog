@@ -45,4 +45,13 @@ public class ChatUserController
 
         return resultMap;
     }
+
+    @PostMapping("/userLogin")
+    @ResponseBody
+    public Map<String, Object> loginChat(ChatUser user)
+    {
+        Map<String, Object> resultMap = Maps.newHashMap();
+
+        return resultMap;
+    }
 }
