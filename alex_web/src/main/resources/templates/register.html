@@ -38,7 +38,7 @@
         <div class="login100-more" style="background-image: url(../alex/register/images/bg-02.jpg);"></div>
 
         <div class="wrap-login100 p-l-50 p-r-50 p-t-72 p-b-50">
-            <form class="login100-form validate-form">
+            <form class="login100-form validate-form" onsubmit="return false;">
 					<span class="login100-form-title p-b-59">
 						Sign Up
 					</span>
@@ -131,30 +131,30 @@
 
         //register user
         $.ajax({
-                   type: "post",
-                   dataType: "json",
-                   url: contextPath + "/registerUser",
-                   data: {
-                       "userName": userName,
-                       "realName": realName,
-                       "email": email,
-                       "password": $.md5(password)
-                   },
-                   success: function (data) {
-                       console.log(data.status);
-                       if (data.status == 1) {
-                           layer.msg("Register successful!");
-                           window.location.href = window.location.host + contextPath + "/login";
-                       }
-                       else {
-                           layer.alert("Register failed!");
-                       }
-                   },
-                   error: function () {
-                       layer.closeAll();
-                       layer.alert("Some errors accoured suddenly, please try again later!");
-                   }
-               });
+            type: "post",
+            dataType: "json",
+            url: contextPath + "/registerUser",
+            data: {
+                "userName": userName,
+                "realName": realName,
+                "email": email,
+                "password": $.md5(password)
+            },
+            success: function (data) {
+                console.log(data.status);
+                if (data.status == 1) {
+                    layer.msg("Register successful!");
+                    window.location.href = window.location.host + contextPath + "/login";
+                }
+                else {
+                    layer.alert("Register failed!");
+                }
+            },
+            error: function () {
+                layer.closeAll();
+                layer.alert("Some errors accoured suddenly, please try again later!");
+            }
+        });
     }
 
     /*]]>*/

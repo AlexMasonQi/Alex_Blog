@@ -5,7 +5,7 @@
 
     <groupId>com.alex</groupId>
     <artifactId>alex-blog</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <modules>
         <module>alex_web</module>
         <module>alex_service</module>

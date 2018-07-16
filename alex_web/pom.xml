@@ -5,18 +5,21 @@
     <parent>
         <artifactId>alex-blog</artifactId>
         <groupId>com.alex</groupId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>alex_web</artifactId>
-    <!--<packaging>war</packaging>-->
+    <packaging>jar</packaging>
+    <properties>
+        <docker.image.prefix>springboot</docker.image.prefix>
+    </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.alex</groupId>
             <artifactId>alex_service</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
 
@@ -30,6 +33,24 @@
                     <fork>true</fork>
                 </configuration>
             </plugin>
+            <!-- Docker maven plugin -->
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <configuration>
+                    <imageName>${docker.image.prefix}/${project.artifactId}</imageName>
+                    <dockerDirectory>src/main/docker</dockerDirectory>
+                    <resources>
+                        <resource>
+                            <targetPath>/</targetPath>
+                            <directory>${project.build.directory}</directory>
+                            <include>${project.build.finalName}.jar</include>
+                        </resource>
+                    </resources>
+                </configuration>
+            </plugin>
+            <!-- Docker maven plugin -->
         </plugins>
     </build>
 
